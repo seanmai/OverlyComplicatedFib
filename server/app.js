@@ -19,7 +19,7 @@ const pgClient = new Pool({
     port: keys.pgPort
 });
 pgClient.on("error", function(){
-    console.log("Lost Postgres connection.").
+    console.log("Lost Postgres connection.");
 });
 // Table setup
 pgClient
