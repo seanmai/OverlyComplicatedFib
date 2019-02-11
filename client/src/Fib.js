@@ -26,4 +26,51 @@ class Fib extends Component {
             seenIndices: seenIndices.data
         });
     }
+
+    handleSubmit = async (event) =>{    // Bound function
+        event.preventDefault();
+        await axios.pos("/api/values", {
+            index: this.state.index
+        });
+        this.setState({ index: "" });
+    };
+
+    renderSeenIndices(){
+        return this.state.seenIndices.map(({ number }) => number ).join(", ");
+    }
+
+    renderValues(){
+        const entries = [];
+        for(let key in this.state.values){
+            entries.push(
+                <div key={key}>
+                    For index {key}, I calculated {this.state.values[key]}
+                </div>
+            );
+        }
+        return entries
+    }
+
+    render(){
+        return(
+            <div>
+                <form onSubmit={this.handleSubmit}>
+                    <label></label>
+                    <input
+                        value={this.state.index}
+                        onChange={event => this.setState({ index: event.target.value })}
+                    />
+                    <button>Submit</button>
+                </form>
+
+                <h3>Indices I have seen:</h3>
+                {this.renderSeenIndices()}
+
+                <h3>Values I have calculated: </h3>
+                {this.renderValues()}
+            </div>
+        )
+    }
 }
+
+export default Fib;
