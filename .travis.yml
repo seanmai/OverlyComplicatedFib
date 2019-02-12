@@ -1,0 +1,40 @@
+sudo: required
+services:
+    - docker
+
+# Build test version of React
+before_install:
+    - docker build -t seanmai/overly-complicated-fib -f ./client/Dockerfile.dev ./client
+    # Uses dev Dockerfile because it needs all dependencies attached to run test suites (not in production dockerfile)
+
+# Run tests
+script:
+    - docker run seanmai/overly-complicated-fib npm run test -- --coverage
+    # -- --coverage allows npm run test to exit (normally enters watch mode listening for instructions)
+
+# Build prod versions from Dockerfile
+after_success:
+    - docker build -t seanmai/multi-client ./client
+    - docker build -t seanmai/multi-nginx ./nginx
+    - docker build -t seanmai/multi-server ./server
+    - docker build -t seanmai/multi-worker ./worker
+    # Log into docker CLI (Get env DOCKER_PASSWORD, run docker login, DOCKER_ID is -u flag and DOCKER_PASSWORD passed over stdin)
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    # Push built images to docker hub
+    - docker push seanmai/multi-client
+    - docker push seanmai/multi-nginx
+    - docker push seanmai/multi-server
+    - docker push seanmai/multi-worker
+#
+# deploy:
+#     provider: elasticbeanstalk
+#     region: "us-east-2"
+#     app: "docker-test"
+#     env: "DockerTest-env"
+#     bucket_name: "elasticbeanstalk-us-east-2-515282096087"
+#     bucket_path: "docker-test"
+#     on:
+#         branch: master       # Only deploy on push to master
+#     access_key_id: $AWS_ACCESS_KEY
+#     secret_access_key:
+#         secure:  "$AWS_SECRET_KEY"
