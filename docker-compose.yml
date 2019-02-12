@@ -4,7 +4,7 @@ services:
         image: 'postgres:latest'
     redis:
         image: 'redis:latest'
-    server:
+    api:                # Node server, gets /api requests routed from nginx
         build:
             dockerfile: Dockerfile.dev
             context: ./server
@@ -19,3 +19,17 @@ services:
             - PGDATABASE=postgres
             - PGPASSWORD=postgres_password
             - PGPORT=5432
+    client:
+        build:
+            dockerfile: Dockerfile.dev
+            context: ./client
+        volumes:
+            - /app/node_modules
+            - ./client:/app
+    worker:
+        build:
+            dockerfile: Dockerfile.dev
+            context: ./worker
+        volumes:
+            - /app/node_modules
+            - ./worker:/app
