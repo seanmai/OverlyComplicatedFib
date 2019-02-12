@@ -25,16 +25,16 @@ after_success:
     - docker push seanmai/multi-nginx
     - docker push seanmai/multi-server
     - docker push seanmai/multi-worker
-#
-# deploy:
-#     provider: elasticbeanstalk
-#     region: "us-east-2"
-#     app: "docker-test"
-#     env: "DockerTest-env"
-#     bucket_name: "elasticbeanstalk-us-east-2-515282096087"
-#     bucket_path: "docker-test"
-#     on:
-#         branch: master       # Only deploy on push to master
-#     access_key_id: $AWS_ACCESS_KEY
-#     secret_access_key:
-#         secure:  "$AWS_SECRET_KEY"
+
+deploy:
+    provider: elasticbeanstalk
+    region: "us-east-2"
+    app: "OverlyComplicatedFib"
+    env: "Overlycomplicatedfib-env"
+    bucket_name: "elasticbeanstalk-us-east-2-515282096087"
+    bucket_path: "docker-multi"
+    on:
+        branch: master       # Only deploy on push to master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key:
+        secure:  "$AWS_SECRET_KEY"
