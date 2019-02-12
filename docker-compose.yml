@@ -4,6 +4,13 @@ services:
         image: 'postgres:latest'
     redis:
         image: 'redis:latest'
+    nginx:
+        restart: always
+        build:
+            dockerfile: Dockerfile.dev
+            context: ./nginx
+        ports:
+            - 3030:80   #3050 was arbitrary, 80 for nginx server
     api:                # Node server, gets /api requests routed from nginx
         build:
             dockerfile: Dockerfile.dev
