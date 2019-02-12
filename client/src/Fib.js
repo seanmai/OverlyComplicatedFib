@@ -27,9 +27,9 @@ class Fib extends Component {
         });
     }
 
-    handleSubmit = async (event) =>{    // Bound function
+    handleSubmit = async event =>{    // Bound function
         event.preventDefault();
-        await axios.pos("/api/values", {
+        await axios.post("/api/values", {
             index: this.state.index
         });
         this.setState({ index: "" });
